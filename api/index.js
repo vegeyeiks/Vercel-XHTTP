@@ -17,7 +17,7 @@ const STRIP_HEADERS = new Set([
   "x-forwarded-proto",
   "x-forwarded-port",
 ]);
-
+//idk i just wanna sex
 export default async function handler(req) {
   if (!TARGET_BASE) {
     return new Response("Misconfigured: TARGET_DOMAIN is not set", { status: 500 });
@@ -41,13 +41,13 @@ export default async function handler(req) {
         if (!clientIp) clientIp = v;
         continue;
       }
-      out.set(k, v);
+      out.set(k, v); //this is goos
     }
     if (clientIp) out.set("x-forwarded-for", clientIp);
 
     const method = req.method;
     const hasBody = method !== "GET" && method !== "HEAD";
-
+//kos mikham
     return await fetch(targetUrl, {
       method,
       headers: out,
