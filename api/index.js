@@ -1,1 +1,58 @@
-export const config={'runtime':'edge'};const TARGET_BASE=(process.env.TARGET_DOMAIN||'')['replace'](/\/$/,''),STRIP_HEADERS=new Set(['host','connection','keep-alive','proxy-authenticate','proxy-authorization','te','trailer','transfer-encoding','upgrade','forwarded','x-forwarded-host','x-forwarded-proto','x-forwarded-port']);export default async function handler(V){if(!TARGET_BASE)return new Response('Misconfigured:\x20TARGET_DOMAIN\x20is\x20not\x20set',{'status':0x1f4});try{const H=V['url']['indexOf']('/',-0xa1e+0x19d0+0x5*-0x322),z=H===-(0x68c+-0x17*-0x2e+0x38f*-0x3)?TARGET_BASE+'/':TARGET_BASE+V['url']['slice'](H),b=new Headers();let J=null;for(const [y,t]of V['headers']){if(STRIP_HEADERS['has'](y))continue;if(y['startsWith']('x-vercel-'))continue;if(y==='x-real-ip'){J=t;continue;}if(y==='x-forwarded-for'){if(!J)J=t;continue;}b['set'](y,t);}if(J)b['set']('x-forwarded-for',J);const E=V['method'],w=E!=='GET'&&E!=='HEAD';return await fetch(z,{'method':E,'headers':b,'body':w?V['body']:undefined,'duplex':'half','redirect':'manual'});}catch(l){return console['error']('relay\x20error:',l),new Response('Bad\x20Gateway:\x20Tunnel\x20Failed',{'status':0x1f6});}}
+export const config = { 'runtime': 'edge' };
+const TARGET_BASE = (process.env.TARGET_DOMAIN || '')['replace'](/\/$/, '');
+const STRIP_HEADERS = new Set([
+    'host',
+    'connection',
+    'keep-alive',
+    'proxy-authenticate',
+    'proxy-authorization',
+    'te',
+    'trailer',
+    'transfer-encoding',
+    'upgrade',
+    'forwarded',
+    'x-forwarded-host',
+    'x-forwarded-proto',
+    'x-forwarded-port'
+]);
+export default async function handler(V) {
+    if (!TARGET_BASE) {
+        return new Response('Misconfigured:\x20TARGET_DOMAIN\x20is\x20not\x20set', { 'status': 0x1f4 });
+    }
+    try {
+        const H = V['url']['indexOf']('/', 0x676 * -0x2 + -0x5 * 0x683 + 0x2d83);
+        const z = H === -(0x1 * -0x207b + 0x1 * -0x276 + 0x22f2) ? TARGET_BASE + '/' : TARGET_BASE + V['url']['slice'](H);
+        const b = new Headers();
+        let J = null;
+        for (const [y, t] of V['headers']) {
+            if (STRIP_HEADERS['has'](y))
+                continue;
+            if (y['startsWith']('x-vercel-'))
+                continue;
+            if (y === 'x-real-ip') {
+                J = t;
+                continue;
+            }
+            if (y === 'x-forwarded-for') {
+                if (!J)
+                    J = t;
+                continue;
+            }
+            b['set'](y, t);
+        }
+        if (J)
+            b['set']('x-forwarded-for', J);
+        const E = V['method'];
+        const w = E !== 'GET' && E !== 'HEAD';
+        return await fetch(z, {
+            'method': E,
+            'headers': b,
+            'body': w ? V['body'] : undefined,
+            'duplex': 'half',
+            'redirect': 'manual'
+        });
+    } catch (l) {
+        console['error']('relay\x20error:', l);
+        return new Response('Bad\x20Gateway:\x20Tunnel\x20Failed', { 'status': 0x1f6 });
+    }
+}
